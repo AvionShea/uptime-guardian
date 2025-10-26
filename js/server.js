@@ -8,14 +8,14 @@ const PORT = process.env.PORT || 3000;
 //Request Logging
 app.use(morgan(":method :url :status :response-time ms"));
 
-// Health endpoint for monitoring
-app.get("/healthz", (req, res) => {
-    res.status(200).json({ status: "ok", uptime: process.uptime() });
-});
-
 //Home Route
 app.get("/", (req, res) => {
     res.type("text").send("Uptime Guardian service is running.");
+});
+
+// Health endpoint for monitoring
+app.get("/healthz", (req, res) => {
+    res.status(200).json({ status: "ok", uptime: process.uptime() });
 });
 
 //Prometheus Setup
