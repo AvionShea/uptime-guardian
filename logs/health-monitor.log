@@ -1,0 +1,6 @@
+{ "ts":"2025-10-26T17:46:20-04:00", "level":"info", "container":"ug-app", "url":"http://localhost:3000/healthz", "msg":"App healthy", "status":"200" }
+{ "ts":"2025-10-26T17:47:21-04:00", "level":"info", "container":"ug-app", "url":"http://localhost:3000/healthz", "msg":"App healthy", "status":"200" }
+{ "ts":"2025-10-26T17:48:24-04:00", "level":"warn", "container":"ug-app", "url":"http://localhost:3000/healthz", "msg":"App down, restarting container...", "status":"000000" }
+{ "ts":"2025-10-26T17:48:25-04:00", "level":"info", "container":"ug-app", "url":"http://localhost:3000/healthz", "msg":"Container restarted successfully", "status":"000000" }
+{ "ts":"2025-10-26T17:49:25-04:00", "level":"info", "container":"ug-app", "url":"http://localhost:3000/healthz", "msg":"App healthy", "status":"200" }
+{ "ts":"2025-10-26T17:50:25-04:00", "level":"info", "container":"ug-app", "url":"http://localhost:3000/healthz", "msg":"App healthy", "status":"200" }
