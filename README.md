@@ -368,3 +368,74 @@ docker compose up -d
 | Metrics    | [http://localhost:3000/metrics](http://localhost:3000/metrics) | Prometheus text format                              |
 | Prometheus | [http://localhost:9090](http://localhost:9090)                 | Target: `app:3000`                                  |
 | Grafana    | [http://localhost:3001](http://localhost:3001)                 | Login: `admin` / your password                      |
+
+## Auto-Recovery and Resilience Testing
+
+Goal: Create a small script that constantly checks if your service is health. If the app goes down, the script automatically restarts the container.
+
+### Create a simple health-check & restart script
+
+In the project root, make a `auto-restart.sh` file
+
+```bash
+#!/bin/bash
+
+# Automatically grab container name for your app image
+CONTAINER_NAME=$(docker ps --filter "ancestor=uptime-guardian:version1.0.0" --format "{{.Names}}" | head -n 1)
+URL="http://localhost:3000/healthz"
+INTERVAL=30  # seconds between checks
+
+if [ -z "$CONTAINER_NAME" ]; then
+  echo "No running container found for uptime-guardian:version1.0.0"
+  exit 1
+fi
+
+echo "Monitoring container: $CONTAINER_NAME"
+
+while true; do
+  STATUS=$(curl -s -o /dev/null -w "%{http_code}" $URL)
+  if [ "$STATUS" != "200" ]; then
+    echo "$(date): App down (status $STATUS). Restarting container..."
+    docker restart $CONTAINER_NAME
+  else
+    echo "$(date): App healthy (status $STATUS)"
+  fi
+  sleep $INTERVAL
+done
+```
+
+Make it executable:
+
+```bash
+chmod +x auto-restart.sh
+```
+
+### Run a manual test
+
+1. Start the compose stack:
+
+```bash
+docker compose up -d
+```
+
+2. Run the monitor script in a separate terminal
+
+```bash
+./auto-restart.sh
+```
+
+3. Simulate a crash:
+
+```bash
+docker stop ug-app
+```
+
+4. Within ~30 seconds, this should appear:
+
+```java
+App down (status 000). Restarting container...
+```
+
+followed by the container restarting automatically.
+
+This reproduces basic self-healing behavior that Kubernetes or ECS provides in production.
