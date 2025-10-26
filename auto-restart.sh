@@ -3,7 +3,7 @@
 # Automatically grab container name for your app image
 CONTAINER_NAME=$(docker ps --filter "ancestor=uptime-guardian:version1.0.0" --format "{{.Names}}" | head -n 1)
 URL="http://localhost:3000/healthz"
-INTERVAL=30
+INTERVAL=60 #seconds between checks
 
 if [ -z "$CONTAINER_NAME" ]; then
   echo "No running container found for uptime-guardian:version1.0.0"
