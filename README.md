@@ -136,3 +136,16 @@ You should see HTTP 200 and a small JSON payload.
 ```json
 { "status": "ok", "uptime": 12.345 }
 ```
+
+## Day 2 Status
+
+- Containerized the Node.js app using Docker
+- Image built from `node:20-slim`
+- Confirmed app runs inside container and exposes port 3000
+
+### Run with Docker
+
+```bash
+docker build -t uptime-guardian .
+docker run -d -p 3000:3000 uptime-guardian
+```
